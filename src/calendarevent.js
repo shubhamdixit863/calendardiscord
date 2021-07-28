@@ -15,6 +15,10 @@ class CalendarEvent {
         let event = {
             'summary': summary,
             'description': description,
+            'visibility':'public',
+            'anyoneCanAddSelf':true,
+            'guestsCanSeeOtherGuests':true,
+            'guestsCanModify':true,
             'start': {
                 'dateTime': start_date,     // Format: '2015-05-28T09:00:00-07:00'
                 'timeZone': timezone,
@@ -38,6 +42,7 @@ class CalendarEvent {
             auth: this.auth,
             calendarId: 'primary',
             resource: event,
+           
           }, function(err, event) {
             if (err) {
                 console.log('There was an error contacting the Calendar service: ' + err);
