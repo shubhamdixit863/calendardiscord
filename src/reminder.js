@@ -12,7 +12,18 @@ const CreateReminder = async(client,message,args,MessageEmbed)=> {
 
 
     db.set(`remind.${message.author.id}`,Date.now() + ms(timeuser))
-    message.channel.send("ok")
+
+    const embed2 = new MessageEmbed()
+    .setTitle('Reminder Created SuccessFully')
+    .setAuthor('Calendar Bot')
+    .setDescription(`Your Reminder`)
+    .setColor('#3C33FF')
+    .setThumbnail('https://example.png')
+    .setImage('https://example.png')
+    .addFooter('To ,Opt Out Of The Reminder ,Type  cancel-Your Reminder Id')
+    .setTimestamp();
+
+    message.channel.send(embed2)
     const interval = setInterval(function() {
     
    /**  Embed MEssage Creation*/
@@ -73,7 +84,7 @@ const CreateReminder = async(client,message,args,MessageEmbed)=> {
     .setTitle('Create Reminder')
     .setURL('https://example.com')
     .setAuthor('Calendar Bot')
-    .setDescription('To Create a Reminder ,type Reminder+Summary-time (10s,10m,10h) ,example Reminder+Remind Me To Go Gym-10s')
+    .setDescription('To Type The Reminder ,Type Reminder-timeinterval example Go To Gym -20s')
     .setColor('#FF2D00')
     .setTimestamp();
 

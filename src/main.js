@@ -11,7 +11,9 @@ const {CreateChannel,CreateChannelInstructions}=require("./createChannel");
 const {KickMember,BanMember} =require("./kick");
 const db = require("quick.db");
 const moment=require("moment");
+const { logError, isOperationalError } = require('./globalErrorHandler');
 
+let messageReference;
 
 
 
@@ -21,6 +23,7 @@ let eventObject={}; // global event object
 client.on('message',async (message)=>{
     // Any message addressing to the bot will be handled by our bot
     //Channel Message
+    messageReference=message; // in case of errors send the command again
     if(message.author.bot) return;
     let prefix;
     if(!message.guild) prefix =   process.env.PREFIX
@@ -112,13 +115,7 @@ client.on('message',async (message)=>{
             createSimpleGuildMessage(MessageEmbed,message,"Not Allowed","You Can't Use This Action In Personal Chat","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg")
 
         }
-       else  if(message.content.includes("Reminder") && !message.author.bot)
-        {
-           const reminderMessage=message.content.split("+")[1].split("-");
-           console.log(reminderMessage)
-           await CreateReminder(client,message,reminderMessage,MessageEmbed)
- 
-         }
+      
 
 
 
@@ -130,6 +127,7 @@ client.on('message',async (message)=>{
     
 
 })
+/*
 client.on("message",(message)=>{
     // handling only personal message
     
@@ -179,9 +177,7 @@ client.on("message",(message)=>{
 
            
        })
-        /*
-      
-        */
+        
         
 
     }
@@ -189,7 +185,11 @@ client.on("message",(message)=>{
 
 })
 
+*/
 
+
+
+// HAndling event creation in personal message here 
 
 client.on("message",(message)=>{
     // handling only personal message
@@ -392,7 +392,62 @@ client.on("message",(message)=>{
 })
 
 
-// messaging to handle creating event
+
+
+client.on("message",(message)=>{
+  // handling the  reminder event
+
+
+
+  if(!message.guild)
+  {
+    let messageBefores= message.channel.messages.fetch({limit:3});
+    messageBefores.then(async data=>{
+
+      let messageBefore=data.array()[1] // previous to last message
+
+         if(messageBefore.embeds && messageBefore.embeds.length>0)
+         {
+
+
+             
+             if(messageBefore.embeds[0].title=="Create Reminder")
+             {
+
+
+              const reminderMessage=message.content.split("-");
+              console.log(reminderMessage)
+              await CreateReminder(client,message,reminderMessage,MessageEmbed)
+
+             }
+         }
+
+
+
+    })
+    
+  }
+
+
+})
+
+// Error Handling Globally
+
+
+process.on('uncaughtException', error => {
+  logError(error)
+
+  messageReference.channel.send("There was Some error ,Please retry the Command")
+
+  // 
+
+ })
+
+ process.on('unhandledRejection', error => {
+  messageReference.channel.send("There was Some error ,Please retry the Command")
+
+  logError(error)
+ })
 
 
 client.login(process.env.DISCORD_BOT_TOKEN);
