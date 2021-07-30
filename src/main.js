@@ -292,8 +292,26 @@ client.on("message",(message)=>{
              
                // gets the Summary and save 
                let _event=db.get(`${message.author.id}_event`);
-               db.set(`${message.author.id}_event`,{..._event,timezone:message.content})
-               createEventStepStartDate(MessageEmbed,message)
+               if(getTimeZonesList().includes(message.content))
+               {
+                db.set(`${message.author.id}_event`,{..._event,timezone:message.content})
+                createEventStepStartDate(MessageEmbed,message)
+               }
+               else{
+                 // If timezone is not proper 
+
+                message.author.send("Please Enter Proper Time Zone ,See The Link Below").then(data=>{
+                  createEventStepTimezone(MessageEmbed,message)
+
+  
+                 }).catch(err=>{
+  
+  
+                 })
+               
+
+               }
+               
  
               
 
