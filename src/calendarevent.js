@@ -49,7 +49,7 @@ class CalendarEvent {
                 return;
             }
             console.log('Event created: %s', event["data"]["htmlLink"]);
-            cb(event["data"]["htmlLink"]);
+            cb(err,event["data"]["htmlLink"]);
         });
     }
 }
