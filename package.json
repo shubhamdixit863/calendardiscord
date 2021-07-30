@@ -16,6 +16,7 @@
     "moment": "^2.29.1",
     "ms": "^2.1.2",
     "quick.db": "^7.1.3",
-    "random-hex-color-generator": "^1.0.12"
+    "random-hex-color-generator": "^1.0.12",
+    "uuid": "^8.3.2"
   }
 }

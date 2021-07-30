@@ -12,8 +12,10 @@ const {KickMember,BanMember} =require("./kick");
 const db = require("quick.db");
 const moment=require("moment");
 const { logError, isOperationalError } = require('./globalErrorHandler');
+const {ReminderChron} =require("./reminderChron");
 
 let messageReference;
+ReminderChron(client,MessageEmbed);
 
 
 
@@ -114,6 +116,44 @@ client.on('message',async (message)=>{
         {
             createSimpleGuildMessage(MessageEmbed,message,"Not Allowed","You Can't Use This Action In Personal Chat","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg")
 
+        }
+
+        // opt out functionality for reminders-
+
+        if(message.content.includes("!Cancel"))
+        {
+
+          let reminderID=message.content.split("-");
+       
+          let remindeArr=db.get("reminders");
+          let filtered=remindeArr.find(ele=>ele.id==reminderID[1]);
+          if(filtered)
+          {
+     
+            let filteredRem=remindeArr.filter(ele=>ele.id!=reminderID[1]);
+            db.set("reminders",filteredRem);
+            message.author.send("ok");
+
+          }
+          else{
+            let rzs=remindeArr.map(ele=>{
+
+              return {name:`Id-${ele.id} ,Message- ${ele.message}`,value:'\u200b' ,inline:true}
+            })
+            const embed2 = new MessageEmbed()
+            .setTitle('Reminder Id Not Found')
+            .setAuthor('Calendar Bot')
+            .setDescription('Following Are The Reminder Set By You,Please Select the Id and Retry')
+            .addFields(rzs)
+            .setColor('#3C33FF')
+            .setThumbnail('https://example.png')
+            .setImage('https://example.png')
+          
+            .setTimestamp();
+  
+            message.author.send(embed2);
+          }
+         
         }
       
 
@@ -318,7 +358,7 @@ client.on("message",(message)=>{
                    
                    .setTimestamp();
                     message.author.send(embed);
-                     //client.channels.cache.get(_event2.channel).send(eventlink);
+                    client.channels.cache.get(_event2.channel).send(embed);
                     
 
 
