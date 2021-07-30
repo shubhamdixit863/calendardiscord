@@ -357,7 +357,7 @@ client.on("message",(message)=>{
                     .addFields([
                     {name:"Summary",value:_event2.summary,inline:true},
                      {name:"Start Date",value:_event2.start_date ,inline:true},
-                     {name:"End Date",value:_event2.start_date,inline:true},
+                     {name:"End Date",value:_event2.end_date,inline:true},
                      {name:"Timezone",value:_event2.timezone,inline:true},
 
 
