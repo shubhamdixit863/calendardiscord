@@ -351,9 +351,18 @@ client.on("message",(message)=>{
                     const embed = new MessageEmbed()
                     .setTitle("Google Event Created")
                     .setDescription("Your Event Is Created")
-                    .setThumbnail("https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F2%2F24%2FGoogle_Hangouts_Meet_icon_%25282017-2020%2529.png&imgrefurl=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AGoogle_Hangouts_Meet_icon_(2017-2020).png&tbnid=pSmsNT8PGRguCM&vet=12ahUKEwiiytf29__xAhVEDysKHZhaBEgQMygBegUIARCuAQ..i&docid=kG6suT0DoaOhdM&w=1024&h=1024&q=google%20meeting%20image%20thumbnail&ved=2ahUKEwiiytf29__xAhVEDysKHZhaBEgQMygBegUIARCuAQ")
+                    .setThumbnail("https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v1/web-96dp/logo_meet_2020q4_color_2x_web_96dp.png")
                     .setURL(eventlink)
                     .setColor('#FF2D00')
+                    .addFields([
+                    {name:"Summary",value:_event2.summary,inline:true},
+                     {name:"Start Date",value:_event2.start_date ,inline:true},
+                     {name:"End Date",value:_event2.start_date,inline:true},
+                     {name:"Timezone",value:_event2.timezone,inline:true},
+
+
+
+                    ])
                     
                    
                    .setTimestamp();
