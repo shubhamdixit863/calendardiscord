@@ -365,7 +365,8 @@ client.on("message",(message)=>{
                   let _event2=db.get(`${message.author.id}_event`);
                   //console.log(_event2);
                   createEvent(_event2,(err,eventlink)=>{
-                    if(err) return message.author.send("There was Some Problem Creating the Event,Please retry with Proper Details");
+                   
+                    if(err) return message.author.send("There was Some Problem Creating the Event,Please make sure start data and end data should be In future");
                    
                     const embed = new MessageEmbed()
                     .setTitle("Google Event Created")

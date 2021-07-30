@@ -46,6 +46,7 @@ class CalendarEvent {
           }, function(err, event) {
             if (err) {
                 console.log('There was an error contacting the Calendar service: ' + err);
+                cb(err,null);
                 return;
             }
             console.log('Event created: %s', event["data"]["htmlLink"]);
