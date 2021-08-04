@@ -79,7 +79,7 @@ function getRandom(arr, n) {
 const createEventStepTimezone=(MessageEmbed,message)=>{
 //  if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
 
- const tzs= getRandom(getTimeZonesList(),200).map((ele,i)=>{
+ const tzs= getRandom(getTimeZonesList(),190).map((ele,i)=>{
 
     if(i !=0 && i%10==0)
     {
