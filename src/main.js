@@ -4,7 +4,7 @@ const client=new Client();
 const {SendOptions,getTimeZonesList,createSimpleGuildMessage,createSimpleGuildMessageWithLink} =require("./util");
 console.log(process.env.DISCORD_BOT_TOKEN);
 const delay = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
-const {createEvent,createEventStepSummary,createEventStepDescription,createEventStepTimezone,createEventStepEndDate,createEventStepStartDate}=require("./events");
+const {createEvent,createEventStepSummary,createEventStepUploadPic,createEventStepDescription,createEventStepTimezone,createEventStepEndDate,createEventStepStartDate}=require("./events");
 const {CreateReminder,CreateReminderStep}=require("./reminder");
 const CreatePrefix=require("./prefix");
 const {CreateChannel,CreateChannelInstructions}=require("./createChannel");
@@ -362,36 +362,9 @@ client.on("message",(message)=>{
 
                   // create event 
 
-                  let _event2=db.get(`${message.author.id}_event`);
-                  //console.log(_event2);
-                  createEvent(_event2,(err,eventlink)=>{
-                   
-                    if(err) return message.author.send("There was Some Problem Creating the Event,Please make sure start data and end data should be In future");
-                   
-                    const embed = new MessageEmbed()
-                    .setTitle("Google Event Created")
-                    .setDescription("Your Event Is Created")
-                    .setThumbnail("https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v1/web-96dp/logo_meet_2020q4_color_2x_web_96dp.png")
-                    .setURL(eventlink)
-                    .setColor('#FF2D00')
-                    .addFields([
-                    {name:"Summary",value:_event2.summary,inline:true},
-                     {name:"Start Date",value:_event2.start_date ,inline:true},
-                     {name:"End Date",value:_event2.end_date,inline:true},
-                     {name:"Timezone",value:_event2.timezone,inline:true},
+                  createEventStepUploadPic(MessageEmbed,message);
 
-
-
-                    ])
-                    
-                   
-                   .setTimestamp();
-                    message.author.send(embed);
-                    client.channels.cache.get(_event2.channel).send(embed);
-                    
-
-
-                  });
+             
 
 
 
@@ -414,27 +387,81 @@ client.on("message",(message)=>{
 
              }
 
-             else  if(messageBefore.embeds[0].title=="Please Confirm By Typing Confirm or Cancel By Typing Cancel")
-             {
-                 if(message.content=="Cancel")
-                 {
-                     db.delete(`${messageBefore.author.id}`)
-                 }
-
-                 else if(message.content=="Confirm")
-                 {
-                      
-                  let _event=db.get(`${messageBefore.author.id}`);
-                      // Saving the vent here
-
-                 }
 
 
-              
- 
+
+
+         // uploading the image here 
+
+
+         else  if(messageBefore.embeds[0].title=="Upload The Picture For Your Event")
+         {
+
+        
+
+
+           if( message.attachments.size > 0)
+           {
               
 
-             }
+            let messageAttachment = message.attachments.array()[0].url ;
+           
+            let _event=db.get(`${message.author.id}_event`);
+                db.set(`${message.author.id}_event`,{..._event,url:messageAttachment})
+                console.log(messageAttachment);
+
+                let _event2=db.get(`${message.author.id}_event`);
+                
+
+                createEvent(_event2,(err,eventlink)=>{
+                 
+                  if(err) return message.author.send("There was Some Problem Creating the Event,Please make sure start data and end data should be In future");
+                 
+                  const embed = new MessageEmbed()
+                  .setTitle("Google Event Created")
+                  .setDescription("Your Event Is Created")
+                  .setThumbnail(messageAttachment)
+                  .setImage(messageAttachment)
+                  .setURL(eventlink)
+                  .setColor('#FF2D00')
+                  .addFields([
+                  {name:"Summary",value:_event2.summary,inline:true},
+                   {name:"Start Date",value:_event2.start_date ,inline:true},
+                   {name:"End Date",value:_event2.end_date,inline:true},
+                   {name:"Timezone",value:_event2.timezone,inline:true},
+
+
+
+                  ])
+                  
+                 
+                 .setTimestamp();
+                  message.author.send(embed);
+                  client.channels.cache.get(_event2.channel).send(embed);
+                  
+
+
+                });
+
+
+           }
+           else{
+           message.author.send("Please Upload Image ,Please Retry").then(data=>{
+            createEventStepUploadPic(MessageEmbed,message)
+
+           }).catch(err=>{
+
+            
+           })
+          
+
+           }
+
+
+          
+
+         }
+         
  
              // creating a reminder here 
           
@@ -518,5 +545,14 @@ process.on('uncaughtException', error => {
   logError(error)
  })
 
+ client.on("message",async(message)=>{
+  if(!message.guild)
+  {
+
+  
+        //message.delete()
+  }
+
+ })
 
 client.login(process.env.DISCORD_BOT_TOKEN);

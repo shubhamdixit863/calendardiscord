@@ -25,7 +25,7 @@ const calendarEvent=new CalendarEvent(oAuth2Client);
 const createEvent=(eventObject,cb)=>{
 
   calendarEvent.addEvent(eventObject["summary"],eventObject["description"],moment(eventObject["start_date"]).format("YYYY-MM-DDTHH:mm:ss"),
-  moment(eventObject["end_date"]).format("YYYY-MM-DDTHH:mm:ss"),eventObject["timezone"],cb)
+  moment(eventObject["end_date"]).format("YYYY-MM-DDTHH:mm:ss"),eventObject["timezone"],eventObject["url"], cb)
 }
 
 
@@ -79,9 +79,9 @@ function getRandom(arr, n) {
 const createEventStepTimezone=(MessageEmbed,message)=>{
 //  if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
 
- const tzs= getRandom(getTimeZonesList(),190).map((ele,i)=>{
+ const tzs= getTimeZonesList().map((ele,i)=>{
 
-    if(i !=0 && i%10==0)
+    if(i !=0 && i%5==0)
     {
      return {name:'\u200b', value:'\u200b'}
     }
@@ -138,7 +138,24 @@ const createEventStepEndDate=(MessageEmbed,message)=>{
 
 }
 
+
+const createEventStepUploadPic=(MessageEmbed,message)=>{
+  //if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+
+  const embed = new MessageEmbed()
+            .setTitle('Upload The Picture For Your Event')
+            .setColor(randomHexColor())
+            .setDescription("Select The Image with + icon and upload It")
+            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation, Or You can type skip to ksip the step")
+            .setTimestamp();
+
+          message.author.send(embed);
+
+
+}
+
+
 module.exports={createEvent,createEventStepSummary,createEventStepDescription,createEventStepTimezone,
 
-  createEventStepEndDate,createEventStepStartDate
+  createEventStepEndDate,createEventStepStartDate,createEventStepUploadPic
 };

@@ -9,7 +9,7 @@ class CalendarEvent {
         this.calendar = google.calendar({version: 'v3', auth});
     }
 
-    addEvent(summary, description, start_date, end_date,timezone,cb){
+    addEvent(summary, description, start_date, end_date,timezone,attachmentUrl,cb){
 
         //This is a standard format for creating calendar events.
         let event = {
@@ -19,6 +19,7 @@ class CalendarEvent {
             'anyoneCanAddSelf':true,
             'guestsCanSeeOtherGuests':true,
             'guestsCanModify':true,
+             'attachments':[attachmentUrl],
             'start': {
                 'dateTime': start_date,     // Format: '2015-05-28T09:00:00-07:00'
                 'timeZone': timezone,
