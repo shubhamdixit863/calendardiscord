@@ -146,7 +146,7 @@ const createEventStepUploadPic=(MessageEmbed,message)=>{
             .setTitle('Upload The Picture For Your Event')
             .setColor(randomHexColor())
             .setDescription("Select The Image with + icon and upload It")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation, Or You can type skip to ksip the step")
+            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation")
             .setTimestamp();
 
           message.author.send(embed);
