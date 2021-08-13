@@ -398,13 +398,28 @@ client.on("message",(message)=>{
          {
 
         
-
+          
 
            if( message.attachments.size > 0)
            {
               
 
             let messageAttachment = message.attachments.array()[0].url ;
+            var substrings = ["jpg", "jpeg", "png"];
+            if (!new RegExp(substrings.join("|")).test(messageAttachment)) {
+              // At least one match
+              message.author.send("Only Png ,jpg and jpeg format supported ,Please Retry").then(data=>{
+                createEventStepUploadPic(MessageEmbed,message)
+    
+               }).catch(err=>{
+    
+                
+               })
+
+               return ;
+              
+              
+          }
            
             let _event=db.get(`${message.author.id}_event`);
                 db.set(`${message.author.id}_event`,{..._event,url:messageAttachment})
