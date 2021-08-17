@@ -433,8 +433,8 @@ client.on("message",(message)=>{
                   if(err) return message.author.send("There was Some Problem Creating the Event,Please make sure start data and end data should be In future");
                  
                   const embed = new MessageEmbed()
-                  .setTitle("Google Event Created")
-                  .setDescription("Your Event Is Created")
+                  .setTitle(_event2.summary)
+                  .setDescription(_event2.description)
                   .setThumbnail(messageAttachment)
                   .setImage(messageAttachment)
                   .setURL(eventlink)
