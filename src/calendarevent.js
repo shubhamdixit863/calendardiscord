@@ -52,7 +52,7 @@ class CalendarEvent {
                 return;
             }
             console.log('Event created: %s', event["data"]["htmlLink"]);
-            let eventLink=`https://calendar.google.com/calendar/r/eventedit?text=${summary}&details=${description}&dates=${event.start.dateTime}/${event.end.dateTime}&ctz=${timezone}&location=${event.location}`
+            let eventLink=`https://calendar.google.com/calendar/r/eventedit?text=${summary}&details=${description}&dates=${event["data"].start.dateTime}/${event["data"].end.dateTime}&ctz=${timezone}&location=${event["data"].location}`
             cb(err,eventLink);
         });
     }
