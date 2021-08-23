@@ -18,6 +18,7 @@ class CalendarEvent {
             'visibility':'public',
             'anyoneCanAddSelf':true,
             'guestsCanSeeOtherGuests':true,
+            'guestsCanInviteOthers':true,
             'guestsCanModify':true,
              'attachments':[attachmentUrl],
             'start': {
@@ -51,7 +52,8 @@ class CalendarEvent {
                 return;
             }
             console.log('Event created: %s', event["data"]["htmlLink"]);
-            cb(err,event["data"]["htmlLink"]);
+            let eventLink=`https://calendar.google.com/calendar/r/eventedit?text=${summary}&details=${description}&dates=${event.start.dateTime}/${event.end.dateTime}&ctz=${timezone}&location=${event.location}`
+            cb(err,eventLink);
         });
     }
 }
