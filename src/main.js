@@ -441,8 +441,8 @@ client.on("message",(message)=>{
                   .setColor('#FF2D00')
                   .addFields([
                   {name:"Summary",value:_event2.summary,inline:true},
-                   {name:"Start Date",value:_event2.start_date ,inline:true},
-                   {name:"End Date",value:_event2.end_date,inline:true},
+                   {name:"Start Date",value:moment(_event2.start_date).format('MMMM Do YYYY, h:mm:ss a') ,inline:true},
+                   {name:"End Date",value:moment(_event2.end_date).format("MMMM Do YYYY, h:mm:ss a"),inline:true},
                    {name:"Timezone",value:_event2.timezone,inline:true},
 
 
