@@ -52,7 +52,9 @@ class CalendarEvent {
                 return;
             }
             console.log('Event created: %s', event["data"]["htmlLink"]);
-            let eventLink=`https://calendar.google.com/calendar/r/eventedit?text=${summary}&details=${description}&dates=${event["data"].start.dateTime}/${event["data"].end.dateTime}&ctz=${timezone}&location=${event["data"].location}`
+            let startDateCombined=event["data"].start.dateTime.replace(/[^a-z\d\s]+/gi, "");
+            let endDateCombined=event["data"].end.dateTime.replace(/[^a-z\d\s]+/gi, "");
+            let eventLink=`https://calendar.google.com/calendar/r/eventedit?text=${summary.replace(/\s+/g, "")}&details=${description.replace(/\s+/g, "")}&dates=${startDateCombined}/${endDateCombined}&ctz=${timezone}&location=${event["data"].location}`
             cb(err,eventLink);
         });
     }
