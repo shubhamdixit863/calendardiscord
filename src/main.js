@@ -437,16 +437,16 @@ client.on("message",(message)=>{
                   if(err) return message.author.send("There was Some Problem Creating the Event,Please make sure start data and end data should be In future");
                  
                   const embed = new MessageEmbed()
-                  .setTitle("Google Event Created")
-                  .setDescription("Your Event Is Created")
+                  .setTitle(_event2.summary)
+                  .setDescription(_event2.description)
                   .setThumbnail(messageAttachment)
                   .setImage(messageAttachment)
                   .setURL(eventlink)
                   .setColor('#FF2D00')
                   .addFields([
                   {name:"Summary",value:_event2.summary,inline:true},
-                   {name:"Start Date",value:_event2.start_date ,inline:true},
-                   {name:"End Date",value:_event2.end_date,inline:true},
+                   {name:"Start Date",value:moment(_event2.start_date).format('MMMM Do YYYY, h:mm:ss a') ,inline:true},
+                   {name:"End Date",value:moment(_event2.end_date).format("MMMM Do YYYY, h:mm:ss a"),inline:true},
                    {name:"Timezone",value:_event2.timezone,inline:true},
 
 
