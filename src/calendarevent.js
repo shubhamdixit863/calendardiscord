@@ -22,11 +22,11 @@ class CalendarEvent {
              'attachments':[attachmentUrl],
             'start': {
                 'dateTime': start_date,     // Format: '2015-05-28T09:00:00-07:00'
-                'timeZone': timezone,
+                'timeZone': "UTC",
             },
             'end': {
                 'dateTime': end_date,
-                'timeZone': timezone,
+                'timeZone': "UTC",
             },
             'reminders': {
                 'useDefault': false,
