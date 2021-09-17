@@ -269,8 +269,8 @@ client.on("message",(message)=>{
                 {
                     let _event=db.get(`${message.author.id}_event`);
                     db.set(`${message.author.id}_event`,{..._event,description:_event.summary})
-                    //createEventStepTimezone(MessageEmbed,message)
-                    createEventStepStartDate(MessageEmbed,message)
+                    createEventStepTimezone(MessageEmbed,message)
+                    //createEventStepStartDate(MessageEmbed,message)
 
 
                 }
@@ -279,8 +279,8 @@ client.on("message",(message)=>{
                 let _event=db.get(`${message.author.id}_event`);
                db.set(`${message.author.id}_event`,{..._event,description:message.content})
 
-                //createEventStepTimezone(MessageEmbed,message)
-                createEventStepStartDate(MessageEmbed,message)
+                createEventStepTimezone(MessageEmbed,message)
+                //createEventStepStartDate(MessageEmbed,message)
 
                }
                
