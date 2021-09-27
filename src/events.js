@@ -30,7 +30,9 @@ const createEvent=(eventObject,cb)=>{
 
 
 const createEventStepSummary=(MessageEmbed,message)=>{
+  
   if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+
 
   // saving the channel name as well in db
   db.set(`${message.author.id}_event`,{channel:message.channel.id})
@@ -39,7 +41,7 @@ const createEventStepSummary=(MessageEmbed,message)=>{
             .setTitle('Enter The Summary For The Event')
             .setColor(randomHexColor())
             .setDescription("Enter Brief Summary About  The Event You Are Creating")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation")
+             .setFooter("To exit type 'cancel'")
             .setTimestamp();
 
           message.author.send(embed);
@@ -47,14 +49,20 @@ const createEventStepSummary=(MessageEmbed,message)=>{
 
 }
 
+const handleCancel=(message)=>{
+  message.author.send("Please restart the Process In Any channel");
+
+}
+
 const createEventStepDescription=(MessageEmbed,message)=>{
  // if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+ if(message.content==="cancel") {handleCancel(message); return};
 
   const embed = new MessageEmbed()
             .setTitle('Enter The Description For The Event')
             .setColor(randomHexColor())
             .setDescription("Enter Detailed Description  About  The Event You Are Creating")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation, Or You can type skip to ksip the step")
+            .setFooter("To exit type 'cancel'")
             .setTimestamp();
 
           message.author.send(embed);
@@ -78,7 +86,7 @@ function getRandom(arr, n) {
 
 const createEventStepTimezone=(MessageEmbed,message)=>{
 //  if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
-
+/*
  const tzs= getTimeZonesList().map((ele,i)=>{
 
     if(i !=0 && i%5==0)
@@ -94,12 +102,36 @@ const createEventStepTimezone=(MessageEmbed,message)=>{
 
 
   })
+  */
+  if(message.content==="cancel") {handleCancel(message); return};
+
+
+ let index=0;
+  const tzs= getTimeZonesList().map((ele,i)=>{
+  
+    let obj={
+      "name": ele.continent,
+      "value": ele.timezone.reduce((acc,ele,i)=>{
+        acc+=`${index+1} ${ele} \n`
+
+        index++;
+      
+      return acc;
+      },""),
+      "inline": true
+    }
+   
+    return obj;
+  
+
+
+  })
   const embed = new MessageEmbed()
-            .setTitle('Enter The TimeZone For The Event')
+            .setTitle("Enter The TimeZone For The Event")
             .setColor(randomHexColor())
             .setDescription("Enter The TimeZone For The Event ,This Step Is Mandatory  See Full List Here [Timezones .](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)")
             .addFields(tzs)
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation ")
+            .setFooter("To exit type 'cancel'")
             
             .setTimestamp();
 
@@ -109,13 +141,16 @@ const createEventStepTimezone=(MessageEmbed,message)=>{
 }
 
 const createEventStepStartDate=(MessageEmbed,message)=>{
+  console.log("hii----------")
+  console.log(message.content);
   //if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+  if(message.content==="cancel") {handleCancel(message); return};
 
   const embed = new MessageEmbed()
             .setTitle('Enter The StartDate For The Event')
             .setColor(randomHexColor())
             .setDescription("Enter Start Date In Format YYYY-MM-DD HH:mm:ss")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation, Or You can type skip to ksip the step")
+            .setFooter("To exit type 'cancel'")
             .setTimestamp();
 
           message.author.send(embed);
@@ -125,12 +160,13 @@ const createEventStepStartDate=(MessageEmbed,message)=>{
 
 const createEventStepEndDate=(MessageEmbed,message)=>{
   //if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+  if(message.content==="cancel") {handleCancel(message); return};
 
   const embed = new MessageEmbed()
             .setTitle('Enter The EndDate For The Event')
             .setColor(randomHexColor())
             .setDescription(" Enter The EndDate For The Event In Format YYYY-MM-DD HH:mm:ss")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation, Or You can type skip to ksip the step")
+            .setFooter("To exit type 'cancel'")
             .setTimestamp();
 
           message.author.send(embed);
@@ -141,12 +177,13 @@ const createEventStepEndDate=(MessageEmbed,message)=>{
 
 const createEventStepUploadPic=(MessageEmbed,message)=>{
   //if(!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have required permissions")
+  if(message.content==="cancel") {handleCancel(message); return};
 
   const embed = new MessageEmbed()
             .setTitle('Upload The Picture For Your Event')
             .setColor(randomHexColor())
             .setDescription("Select The Image with + icon and upload It")
-            .setFooter("Please Enter Command In the Same Format to Proceed With Event Creation")
+            .setFooter("To exit type 'cancel'")
             .setTimestamp();
 
           message.author.send(embed);

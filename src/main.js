@@ -1,8 +1,8 @@
 require("dotenv").config();
 const {Client,MessageEmbed}=require('discord.js');
 const client=new Client();
-const {SendOptions,getTimeZonesList,createSimpleGuildMessage,createSimpleGuildMessageWithLink} =require("./util");
-console.log(process.env.DISCORD_BOT_TOKEN);
+const {SendOptions,getTimeZonesList,createSimpleGuildMessage,createSimpleGuildMessageWithLink, isValidDate} =require("./util");
+//console.log(process.env.DISCORD_BOT_TOKEN);
 const delay = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 const {createEvent,createEventStepSummary,createEventStepUploadPic,createEventStepDescription,createEventStepTimezone,createEventStepEndDate,createEventStepStartDate}=require("./events");
 const {CreateReminder,CreateReminderStep}=require("./reminder");
@@ -13,7 +13,7 @@ const db = require("quick.db");
 const moment=require("moment");
 const { logError, isOperationalError } = require('./globalErrorHandler');
 const {ReminderChron} =require("./reminderChron");
-
+const timezones=require("./timezones.json");
 let messageReference;
 ReminderChron(client,MessageEmbed);
 
@@ -111,7 +111,7 @@ client.on('message',async (message)=>{
     else{
 
         // One To One Message With Bot
-       // if(client.user.lastMessage)console.log("Last message",client.user.lastMessage.content);
+       // if(client.user.lastMessage)//console.log("Last message",client.user.lastMessage.content);
         if(([`${prefix}event`,`${prefix}reminder`,`${prefix}channel`,`${prefix}prefix`].includes (message.content)) && !message.author.bot)
         {
             createSimpleGuildMessage(MessageEmbed,message,"Not Allowed","You Can't Use This Action In Personal Chat","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg","https://image.shutterstock.com/image-vector/dont-touch-please-icon-no-600w-1914599251.jpg")
@@ -174,7 +174,7 @@ client.on("message",(message)=>{
 
     if(!message.guild)
     {
-        //console.log(message);
+        ////console.log(message);
        let messageBefores= message.channel.messages.fetch({limit:3});
        messageBefores.then(data=>{
           
@@ -186,7 +186,7 @@ client.on("message",(message)=>{
              if(messageBefore.embeds[0].title=="Creating An Event")
              {
  
-                 console.log(message.content);
+                 //console.log(message.content);
                  let eventArray=message.content.split(",");
                  let eventObject={};
                  eventObject["timezone"]=eventArray[1];
@@ -237,7 +237,7 @@ client.on("message",(message)=>{
 
     if(!message.guild)
     {
-        //console.log(message);
+        ////console.log(message);
        let messageBefores= message.channel.messages.fetch({limit:3});
        messageBefores.then(data=>{
           
@@ -263,7 +263,7 @@ client.on("message",(message)=>{
 
 
             else  if(messageBefore.embeds[0].title=="Enter The Description For The Event")
-             {
+             {  
 
                 if(message.content=="skip")
                 {
@@ -294,9 +294,10 @@ client.on("message",(message)=>{
              else  if(messageBefore.embeds[0].title=="Enter The TimeZone For The Event")
              {
              
+              //console.log("hii------")
                // gets the Summary and save 
                let _event=db.get(`${message.author.id}_event`);
-               if(getTimeZonesList().includes(message.content))
+               if(timezones.includes(message.content))
                {
                 db.set(`${message.author.id}_event`,{..._event,timezone:message.content})
                 createEventStepStartDate(MessageEmbed,message)
@@ -326,9 +327,9 @@ client.on("message",(message)=>{
              {
 
                // gets the Summary and save 
-              
+               
 
-               if(moment(message.content).isValid())
+               if(moment(message.content,moment.ISO_8601).isValid()  && isValidDate(message.content))
                {
                 let _event=db.get(`${message.author.id}_event`);
                 db.set(`${message.author.id}_event`,{..._event,start_date:message.content})
@@ -358,7 +359,7 @@ client.on("message",(message)=>{
             
 
 
-               if(moment(message.content).isValid())
+               if(moment(message.content,moment.ISO_8601).isValid() && isValidDate(message.content) )
                {
                   // gets the Summary and save 
                   let _event=db.get(`${message.author.id}_event`);
@@ -427,7 +428,7 @@ client.on("message",(message)=>{
            
             let _event=db.get(`${message.author.id}_event`);
                 db.set(`${message.author.id}_event`,{..._event,url:messageAttachment})
-                console.log(messageAttachment);
+                //console.log(messageAttachment);
 
                 let _event2=db.get(`${message.author.id}_event`);
                 
@@ -532,7 +533,7 @@ client.on("message",(message)=>{
 
 
               const reminderMessage=message.content.split("-");
-              console.log(reminderMessage)
+              //console.log(reminderMessage)
               await CreateReminder(client,message,reminderMessage,MessageEmbed)
 
              }
