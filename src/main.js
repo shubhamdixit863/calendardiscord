@@ -1,7 +1,7 @@
 require("dotenv").config();
 const {Client,MessageEmbed}=require('discord.js');
 const client=new Client();
-const {SendOptions,getTimeZonesList,createSimpleGuildMessage,createSimpleGuildMessageWithLink, isValidDate} =require("./util");
+const {SendOptions,CheckForRoles,getTimeZonesList,createSimpleGuildMessage,createSimpleGuildMessageWithLink, isValidDate} =require("./util");
 //console.log(process.env.DISCORD_BOT_TOKEN);
 const delay = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 const {createEvent,createEventStepSummary,createEventStepUploadPic,createEventStepDescription,createEventStepTimezone,createEventStepEndDate,createEventStepStartDate}=require("./events");
@@ -22,7 +22,12 @@ ReminderChron(client,MessageEmbed);
 // messaging event
 let eventObject={}; // global event object 
 
+
+
 client.on('message',async (message)=>{
+
+  if(!CheckForRoles(message)) return;
+
     // Any message addressing to the bot will be handled by our bot
     //Channel Message
     messageReference=message; // in case of errors send the command again
@@ -167,65 +172,7 @@ client.on('message',async (message)=>{
     
 
 })
-/*
-client.on("message",(message)=>{
-    // handling only personal message
-    
 
-    if(!message.guild)
-    {
-        ////console.log(message);
-       let messageBefores= message.channel.messages.fetch({limit:3});
-       messageBefores.then(data=>{
-          
-           
-         let messageBefore=data.array()[1] // previous to last message
-
-         if(messageBefore.embeds && messageBefore.embeds.length>0)
-         {
-             if(messageBefore.embeds[0].title=="Creating An Event")
-             {
- 
-                 //console.log(message.content);
-                 let eventArray=message.content.split(",");
-                 let eventObject={};
-                 eventObject["timezone"]=eventArray[1];
-                 eventObject["summary"]=eventArray[4];
-                 eventObject["description"]=eventArray[4];
-                 eventObject["start_data"]=eventArray[2];
-                 eventObject["end_data"]=eventArray[3];
-                
-                 createEvent(eventObject,(data)=>{
-
-                    createSimpleGuildMessageWithLink(MessageEmbed,message,"Event Created","You Have An Upcoming Google Calendar event",eventArray[2],eventArray[3],data,eventArray[0],client)
-
-                 })
-
-             }
- 
-             // creating a reminder here 
-          
-         }
- 
-         else{
- 
- 
-            // no embedded message sent before
-             createSimpleGuildMessage(MessageEmbed,message,"Please Start Over In Any Channel ,I am Part Of","","","");
- 
-         }
-
-           
-       })
-        
-        
-
-    }
-
-
-})
-
-*/
 
 
 
@@ -233,6 +180,7 @@ client.on("message",(message)=>{
 
 client.on("message",(message)=>{
     // handling only personal message
+    //if(!CheckForRoles(message))  return;
     
 
     if(!message.guild)

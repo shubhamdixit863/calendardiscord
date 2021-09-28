@@ -1,3 +1,5 @@
+const roles=require("./roles.json");
+
 const SendOptions=(MessageEmbed,message,name,prefix)=>{
 
   const embed = new MessageEmbed()
@@ -94,6 +96,29 @@ function isValidDate(dateObject){
   return new Date(dateObject).toString() !== 'Invalid Date';
 }
 
+// This checks for roles from json file ,if the roles are mentioned in the files 
+// then only the user would be able to command the bot
+const CheckForRoles=(message)=>{
+if(message.member)
+{
+  const flag=message.member.roles.cache.some(role => roles.includes(role.name));
+  if(!flag){
+    
+ 
+ return false;
+ 
+ 
+  }
+ 
+  return true;
+ 
+}
+else{
+  return false;
+}
+
+
+}
 
 const getTimeZonesList=()=>{
 
@@ -167,6 +192,7 @@ module.exports={
     getTimeZonesList,
     createSimpleGuildMessage,
     createSimpleGuildMessageWithLink,
-    isValidDate
+    isValidDate,
+    CheckForRoles
 }
 
